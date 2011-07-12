@@ -1,0 +1,26 @@
+<script type="text/javascript" src="chain.js"></script>
+<script type="text/javascript">
+    function extend(obj1, obj2) {
+        for (var i in obj2) {
+            obj1[i] = obj2[i];
+        }
+        return obj1
+    };
+    var a = function() {
+        this.__init__.apply(this, arguments);
+        this.constructor = a;
+    }
+    a.prototype = extend(extend({}, Chain.prototype), {
+        __init__: function(num, options, ref) {
+            Chain.prototype.__init__.apply(this, [options, ref]);
+            this.num = num;
+        },
+        foo: function() {
+            alert("I'm working here: " + this.num);
+        },
+        bar: function() {
+            alert("No, I'm working here: " + this.num);
+        },
+    });
+    (new a(0, {onFoo: function() { alert('ONFOO: ' + this.num); }})).foo().bar().spawn(1).foo().bar().spawn(2, {}).foo().bar().despawn().foo().bar().despawn().foo({onFoo: function() { alert('NOT THIS TIME, BUD!'); }}).bar();
+</script>
