@@ -1,0 +1,23 @@
+chain.js -- a super-duper stripped down library providing method chaining
+            capabilities similar to jquery ... and callbacks.
+
+How To Use the Chain class:
+
+Chain is a class, it uses it's prototype object to establish a base of
+inheritence.  To invoke a new chain:
+
+    new Chain()
+
+Should you want to extend your chain to do something worthwhile, you
+can do so in a variety of ways:
+
+    function MyChain() {
+        Chain.prototype.__init__.apply(this, arguments);
+        this.constructor = MyChain;
+    }
+
+    MyChain.prototype['foo'] = function() {
+        alert('I did something!');
+    }
+
+... More Documentation Soonish ...
