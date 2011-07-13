@@ -7,14 +7,13 @@ var Chain = function() {
 Chain.prototype = {
     // list of non-chained methods 
     ignores: [ '__init__','returnThis','ignore','spawn','despawn' ],
-    __init__: function(options, ref) {
+    __init__: function(arg, options) {
         // load up chained methods
         for (var i in this) {
             if (this[i] && this[i].constructor == Function && !this.ignore(i)) {
                 this[i] = this.returnThis(this[i], i);
             }
         }
-        this.ref = ref;
         this.options = options || {};
     },
     // check to see if the function is non-chained
@@ -38,16 +37,16 @@ Chain.prototype = {
         }
     },
     // spawn a new instance
-    spawn: function() {
-        var argstring = '';
-        for (var i=0; i<arguments.length;i++) {
-            argstring += 'arguments[' + i + '],';
+    spawn: function(arg, opts) {
+        opts = opts || {};
+        for (var i in this.options) {
+            opts[i] = (opts[i] == undefined) ? this.options[i]:opts[i];
         }
-        eval("var spawned = new (this.constructor)(" + argstring + "this);");
-        return spawned;
+        opts['ref'] = this;
+        return new this.constructor(arguments[0], opts);
     },
     // go to previous instance, if there is one
     despawn: function() {
-        return this.ref || this;
+        return this.options['ref'] || this;
     },
 };

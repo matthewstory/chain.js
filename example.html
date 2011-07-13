@@ -11,8 +11,8 @@
         this.constructor = a;
     }
     a.prototype = extend(extend({}, Chain.prototype), {
-        __init__: function(num, options, ref) {
-            Chain.prototype.__init__.apply(this, [options, ref]);
+        __init__: function(num, options) {
+            Chain.prototype.__init__.apply(this, [num, options]);
             this.num = num;
         },
         foo: function() {
@@ -22,5 +22,20 @@
             alert("No, I'm working here: " + this.num);
         },
     });
-    (new a(0, {onFoo: function() { alert('ONFOO: ' + this.num); }})).foo().bar().spawn(1).foo().bar().spawn(2, {}).foo().bar().despawn().foo().bar().despawn().foo({onFoo: function() { alert('NOT THIS TIME, BUD!'); }}).bar();
+    function makeOne(num, options) {
+        return new a(num, options);
+    }
+    makeOne(0, {
+        onFoo: function() { 
+            alert('ONFOO: ' + this.num); 
+        }
+    }).foo().bar().spawn(1).foo().bar().spawn(2, {
+        onBar: function() {
+            alert('ONBAR: ' + this.num);
+        }
+    }).foo().bar().despawn().foo().bar().despawn().foo({
+        onFoo: function() { 
+            alert('NOT THIS TIME, BUD!'); 
+        }
+    }).bar();
 </script>
